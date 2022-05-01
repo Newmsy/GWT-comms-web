@@ -248,7 +248,7 @@ const TicketItem = ({
   );
 };
 
-const CalendarItem = ({
+export const CalendarItem = ({
   data: {
     title,
     description,
