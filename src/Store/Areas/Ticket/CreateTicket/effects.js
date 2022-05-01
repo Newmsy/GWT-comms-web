@@ -1,8 +1,8 @@
 import { takeLatest, put } from "redux-saga/effects";
-import { createEventActions } from "./state";
+import { createTicketActions } from "./state";
 import { ApiClient } from "../../../apiClient";
 
-function* createEventWorker(action) {
+function* createTicketWorker(action) {
   const apiClient = new ApiClient();
 
   const response = yield apiClient.post(
@@ -17,13 +17,13 @@ function* createEventWorker(action) {
     false
   );
   if (response?.ok) {
-    yield put(createEventActions.createEventSuccess());
+    yield put(createTicketActions.createTicketSuccess());
   }
 }
 
-export function* createEventWatcher() {
+export function* createTicketWatcher() {
   yield takeLatest(
-    createEventActions.createEvent.toString(),
-    createEventWorker
+    createTicketActions.createTicket.toString(),
+    createTicketWorker
   );
 }

@@ -1,23 +1,23 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { createEventActions, createEventStateSelector } from "./state";
+import { createTicketActions, createTicketStateSelector } from "./state";
 import {userStateSelector} from "../../User/state"
 
-export const useCreateEvent = () => {
+export const useCreateTicket = () => {
   const dispatch = useDispatch();
   const { loading } = useSelector(
-    createEventStateSelector
+    createTicketStateSelector
   );
   const { name } = useSelector(
     userStateSelector
   );
   console.log(name)
 
-  const createEvent = React.useCallback(
+  const createTicket = React.useCallback(
     ({ title, description, isInSprint, eta }) => {
       console.log("Called create event");
       dispatch(
-        createEventActions.createEvent({
+        createTicketActions.createTicket({
           title: title,
           description: description,
           isInSprint: isInSprint,
@@ -32,6 +32,6 @@ export const useCreateEvent = () => {
   return {
     name,
     loading,
-    createEvent,
+    createTicket,
   };
 };

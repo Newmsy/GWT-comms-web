@@ -4,11 +4,12 @@ import {
   Paper,
   Input,
   TextField,
-  Radio,
 } from "@mui/material";
 import React from "react";
 import { useToastDispatcher } from "../Store/Areas/Toast/hooks";
-import { useTickets } from "../Store/Areas/Ticket/FetchTickets/hooks";
+import { useEvents } from "../Store/Areas/Event/FetchEvents/hooks";
+import { StaticDatePicker } from "@mui/lab";
+import { FormatDateString } from "../Utils/DateUtils";
 
 const style = {
   position: "absolute",
@@ -24,14 +25,13 @@ const style = {
   p: 4,
 };
 
-export const CreateTicketModal = ({ open, onClose, onSubmit }) => {
+export const CreateEventModal = ({ open, onClose, onSubmit }) => {
   const [title, setTitle] = React.useState("");
   const [description, setDescription] = React.useState("");
+  
+  const [date, setDate] = React.useState(new Date());
 
-  const [isInSprint, setIsInSprint] = React.useState(true);
-  const [eta, setEta] = React.useState(0);
-
-  const { fetchTickets } = useTickets();
+  const { fetchEvents } = useEvents();
 
 
   const { addToast } = useToastDispatcher();
@@ -40,14 +40,13 @@ export const CreateTicketModal = ({ open, onClose, onSubmit }) => {
     await onSubmit({
         title: title,
         description: description,
-        isInSprint: isInSprint,
-        eta: eta
+        date: date,
     });
     onClose();
-    setTimeout(()=>{fetchTickets();}, 2000)
+    setTimeout(()=>{fetchEvents();}, 2000)
     
-    addToast(`New ticket has been created!`);
-  }, [addToast, description, eta, fetchTickets, isInSprint, onClose, onSubmit, title]);
+    addToast(`New event has been added!`);
+  }, [addToast, date, description, fetchEvents, onClose, onSubmit, title]);
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -66,37 +65,15 @@ export const CreateTicketModal = ({ open, onClose, onSubmit }) => {
             multiline
             rows={4}
           />
-          <p style={{ fontSize: 30 }}>ETA (days)</p>
-          <Input
-            style={{ marginBottom: 30 }}
-            onChange={(e) => setEta(e.target.value)}
-            type="number"
-            value={eta}
-          />
-
-          <p style={{ fontSize: 30, marginTop: 30 }}>Included in current sprint?</p>
-          <Box>
-            <Box display="flex" flexDirection="row" alignItems="center">
-              <Radio
-                checked={isInSprint === true}
-                onChange={() => setIsInSprint(true)}
-                value="a"
-                name="radio-buttons"
-                inputProps={{ "aria-label": "A" }}
-              />
-              <p style={{ fontSize: 16, marginTop: 16 }}>Yes</p>
-            </Box>
-            <Box display="flex" flexDirection="row">
-              <Radio
-                checked={isInSprint === false}
-                onChange={() => setIsInSprint(false)}
-                value="b"
-                name="radio-buttons"
-                inputProps={{ "aria-label": "B" }}
-              />
-              <p style={{ fontSize: 16, marginTop: 16 }}>No</p>
-            </Box>
-          </Box>
+          <p style={{ fontSize: 30 }}>Date<span style={{ color: "#9c9c9c" }}>
+              &nbsp; &nbsp; &nbsp; {FormatDateString(date)}
+            </span></p>
+          <StaticDatePicker onChange={(newValue) => {
+              setDate(newValue);
+            }}
+            displayStaticWrapperAs="desktop"
+            renderInput={(params) => <TextField {...params} />}
+            value={date}/>
 
           <Box
             display="flex"
@@ -110,7 +87,7 @@ export const CreateTicketModal = ({ open, onClose, onSubmit }) => {
                 className="btn btn-success"
                 onClick={onSubmitEvent}
               >
-                Create Item
+                Create Event
               </button>
             </div>
           </Box>

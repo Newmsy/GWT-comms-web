@@ -1,32 +1,30 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getEventsActions, getEventsStateSelector } from "./state";
+import { getTicketsActions, getTicketsStateSelector } from "./state";
 
 
 
-export const useEvents = () => {
+export const useTickets = () => {
   const dispatch = useDispatch();
   const {  loading, tickets } = useSelector(
-    getEventsStateSelector
+    getTicketsStateSelector
   );
 
-  const fetchEvents = React.useCallback(() => {
-    dispatch(getEventsActions.fetchEvents());
+  const fetchTickets = React.useCallback(() => {
+    dispatch(getTicketsActions.fetchTickets());
   }, [dispatch]);
 
   const setViewDate = React.useCallback(
     (date) => {
-      dispatch(getEventsActions.setViewDate(date));
+      dispatch(getTicketsActions.setViewDate(date));
     },
     [dispatch]
   );
 
-  
-
   return {
     loading,
     tickets,
-    fetchEvents,
+    fetchTickets,
     setViewDate,
     
   };

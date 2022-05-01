@@ -4,21 +4,21 @@ export const initialState = {
   loading: false,
 };
 
-const createEventsSlice = createSlice({
-  name: "CreateEvent",
+const createTicketsSlice = createSlice({
+  name: "CreateTicket",
   initialState,
   reducers: {
-    createEvent(state) {
+    createTicket(state) {
       state.loading = true;
     },
-    createEventSuccess(state, action) {
+    createTicketSuccess(state, action) {
       state.loading = false;
     },
   },
 });
 
-export const createEventStateSelector = (state) => state.createEvent;
+export const createTicketStateSelector = (state) => state.createTicket;
 
-const createEventActions = createEventsSlice.actions;
+const createTicketActions = createTicketsSlice.actions;
 
-export { createEventActions, createEventsSlice };
+export { createTicketActions, createTicketsSlice };

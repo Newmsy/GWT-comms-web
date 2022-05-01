@@ -1,23 +1,23 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { userStateSelector } from "../../User/state";
-import { getTicketsActions, getTicketsStateSelector } from "./state";
+import { getEventsActions, getEventsStateSelector } from "./state";
 
-export const TicketsListener = () => {
+export const EventsListener = () => {
   const dispatch = useDispatch();
-  const { loading, fetched, tickets, viewDate } = useSelector(
-    getTicketsStateSelector
+  const { loading, fetched, events, viewDate } = useSelector(
+    getEventsStateSelector
   );
   const { isSignedIn } = useSelector(userStateSelector);
     
-  console.log(tickets);
+  console.log(events);
   React.useEffect(() => {
     if (!fetched && !loading && isSignedIn)
-      dispatch(getTicketsActions.fetchTickets());
+      dispatch(getEventsActions.fetchEvents());
   }, [dispatch, fetched, isSignedIn, loading]);
 
   React.useEffect(() => {
-    dispatch(getTicketsActions.fetchTickets());
+    dispatch(getEventsActions.fetchEvents());
   }, [dispatch, viewDate]);
   return <div />;
 };

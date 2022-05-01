@@ -1,8 +1,8 @@
 import { takeLatest, put } from "redux-saga/effects";
-import { getEventsActions } from "./state";
+import { getTicketsActions } from "./state";
 import { ApiClient } from "../../../apiClient";
 
-function* fetchEventsWorker() {
+function* fetchTicketsWorker() {
   const apiClient = new ApiClient();
 
   const response = yield apiClient.get("/api/ticket/getall", false);
@@ -12,10 +12,10 @@ function* fetchEventsWorker() {
 
     
    
-      yield put(getEventsActions.fetchEventsSuccess({ tickets: data.data }));
+      yield put(getTicketsActions.fetchTicketsSuccess({ tickets: data.data }));
   }
 }
 
-export function* fetchEventsWatcher() {
-  yield takeLatest(getEventsActions.fetchEvents.toString(), fetchEventsWorker);
+export function* fetchTicketsWatcher() {
+  yield takeLatest(getTicketsActions.fetchTickets.toString(), fetchTicketsWorker);
 }

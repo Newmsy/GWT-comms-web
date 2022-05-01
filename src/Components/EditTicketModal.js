@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useToastDispatcher } from "../Store/Areas/Toast/hooks";
-import { useEvents } from "../Store/Areas/Ticket/FetchTickets/hooks";
+import { useTickets } from "../Store/Areas/Ticket/FetchTickets/hooks";
 import { useEditEvent } from "../Store/Areas/Ticket/EditTicket/hooks";
 
 const style = {
@@ -35,7 +35,7 @@ export const EditTicketModal = ({ open, onClose, ticket }) => {
   const [eta, setEta] = React.useState(ticket.etaDays);
   const [status, setStatus] = React.useState(ticket.status);
 
-  const { fetchEvents } = useEvents();
+  const { fetchTickets } = useTickets();
   console.log(ticket);
   console.log(title);
 
@@ -53,29 +53,18 @@ export const EditTicketModal = ({ open, onClose, ticket }) => {
       status: status,
     });
     onClose();
-    fetchEvents();
+    fetchTickets();
     addToast(`Ticket has been updated!`);
-  }, [
-    addToast,
-    description,
-    eta,
-    fetchEvents,
-    isInSprint,
-    onClose,
-    onSubmitEdit,
-    status,
-    ticket.id,
-    title,
-  ]);
+  }, [addToast, description, eta, fetchTickets, isInSprint, onClose, onSubmitEdit, status, ticket.id, title]);
 
   const onSubmitDeleteTicket = React.useCallback(async () => {
     await onSubmitDelete({
       id: ticket.id,
     });
     onClose();
-    fetchEvents();
+    fetchTickets();
     addToast(`Ticket has been deleted!`);
-  }, [addToast, fetchEvents, onClose, onSubmitDelete, ticket.id]);
+  }, [addToast, fetchTickets, onClose, onSubmitDelete, ticket.id]);
 
   return (
     <Modal open={open} onClose={onClose}>

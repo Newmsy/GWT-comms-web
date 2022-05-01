@@ -1,32 +1,40 @@
 import React from "react";
-import { useEvents } from "../../Store/Areas/Ticket/FetchTickets/hooks";
+import { useTickets } from "../../Store/Areas/Ticket/FetchTickets/hooks";
 import {
   Box,
   Paper,
   Button,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { FormatDateString } from "../../Utils/DateUtils";
 import { EditTicketModal } from "../../Components/EditTicketModal";
 
 export const Calendar = () => {
-  const { tickets } = useEvents();
+  const { tickets } = useTickets();
   const styles = useStyles();
   const [editingItem, setEditingItem] = React.useState(null);
+  const [filterStatus, setFilterStatus] = React.useState("All")
+
+  const filteredTickets = React.useMemo(()=>{
+    return tickets.filter(ticket => filterStatus === "All" || ticket.status === filterStatus)
+  },[filterStatus, tickets])
+
+  console.log(filteredTickets)
 
   const sprintTickets = React.useMemo(()=>{
-    return tickets.filter(x => x.isInSprint)
-  },[tickets])
+    return filteredTickets.filter(x => x.isInSprint)
+  },[filteredTickets])
 
   const nonSprintTickets = React.useMemo(()=>{
-    return tickets.filter(x => !x.isInSprint)
-  },[tickets])
+    return filteredTickets.filter(x => !x.isInSprint)
+  },[filteredTickets])
 
   const sprintEta = React.useMemo(()=>{
     return sprintTickets.reduce((prev,curr)=>{return prev+curr.etaDays},0)
   },[sprintTickets])
-
-  console.log(sprintEta)
+  
 
   return (
     <div
@@ -35,6 +43,8 @@ export const Calendar = () => {
         backgroundColor: "#f2f2f2",
         display: "flex",
         justifyContent: "center",
+        flexDirection: "column",
+        alignItems: "center"
       }}
     >
       {editingItem != null && (
@@ -62,6 +72,75 @@ export const Calendar = () => {
         >
           <p className={styles.titleB}>Current Sprint</p>
           <p>Total ETA: <b>{sprintEta} day(s)</b></p>
+        </Box>
+        <Box marginLeft={4}>
+              <p style={{ fontSize: 20, marginBottom: 0 }}>Filter</p>
+              <Select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                style={{ minWidth: 200 }}
+                
+              >
+                <MenuItem value="All">All</MenuItem>
+                <MenuItem value="Completed">Completed</MenuItem>
+                <MenuItem value="Pending">Pending</MenuItem>
+                <MenuItem value="InProgress">In Progress</MenuItem>
+              </Select>
+            </Box>
+
+        <Box
+          marginLeft={4}
+          marginTop={4}
+          paddingRight={10}
+          display="flex"
+          flexDirection="column"
+          justifyContent="space-between"
+        >
+          {sprintTickets?.map((ticket) => (
+            <TicketItem data={{ ...ticket }} setEditingItem={setEditingItem} />
+          ))}
+        </Box>
+        <Box
+          marginLeft={4}
+          marginTop={8}
+          paddingRight={10}
+          display="flex"
+          justifyContent="space-between"
+        >
+          <p className={styles.titleB}>Backlog</p>
+        </Box>
+
+        <Box
+          marginLeft={4}
+          marginTop={4}
+          paddingRight={10}
+          display="flex"
+          flexDirection="column"
+          justifyContent="space-between"
+        >
+          {nonSprintTickets?.map((ticket) => (
+            <TicketItem data={{ ...ticket }} setEditingItem={setEditingItem} />
+          ))}
+        </Box>
+      </Paper>
+      <Paper
+        style={{
+          width: "80%",
+          marginTop: 50,
+          paddingTop: 20,
+          paddingBottom: 50,
+        }}
+      >
+        <Box
+          marginLeft={4}
+          marginTop={4}
+          paddingRight={10}
+          display="flex"
+          justifyContent="space-between"
+          alignItems="flex-end"
+        >
+          <p className={styles.titleB}>Meetings</p>
+          
         </Box>
 
         <Box
@@ -164,6 +243,47 @@ const TicketItem = ({
         <p className={styles.descriptionText}>
           Date added: <b>{FormatDateString(dateAdded)}</b>
         </p>
+      </Box>
+    </Box>
+  );
+};
+
+const CalendarItem = ({
+  data: {
+    title,
+    description,
+    date,
+    id,
+  },
+  setEditingItem,
+}) => {
+  const styles = useStyles();
+  
+  return (
+    <Box className={styles.ticketItem}>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="flex-start"
+      >
+        <Box>
+          <h2>{title} - {FormatDateString(date)}</h2>
+          <p>{description}</p>
+        </Box>
+        <Button
+          onClick={() =>
+            setEditingItem({
+              ticket: {
+                title,
+                description,
+                date,
+                id,
+              },
+            })
+          }
+        >
+          Edit
+        </Button>
       </Box>
     </Box>
   );

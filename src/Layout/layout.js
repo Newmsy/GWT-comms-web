@@ -1,20 +1,22 @@
 import React from "react";
-import { useCreateEvent } from "../Store/Areas/Ticket/CreateTicket/hooks";
+import { useCreateTicket } from "../Store/Areas/Ticket/CreateTicket/hooks";
 import { useSignInUser } from "../Store/Areas/User/hooks";
 import { SignInModal } from "../Components/SignInModal";
 import { CreateTicketModal } from "../Components/CreateTicketModal";
 import { Box } from "@mui/material";
-import { SavedTicketsModal } from "../Components/UpcomingEventsModal";
+import { CreateEventModal } from "../Components/CreateEventModal";
+import { useCreateEvent } from "../Store/Areas/Event/CreateEvent/hooks";
 
 export const Layout = (props) => {
-  const { createEvent } = useCreateEvent();
+  const { createTicket } = useCreateTicket();
+  const {createEvent}= useCreateEvent()
 
   const { isSignedIn, signIn, loadingSignIn, name, signOut } =
     useSignInUser();
 
   const [signInOpen, setSignInOpen] = React.useState(false);
+  const [createTicketOpen, setCreateTicketOpen] = React.useState(false);
   const [createEventOpen, setCreateEventOpen] = React.useState(false);
-  const [SavedTicketsOpen, setSavedTicketsOpen] = React.useState(false);
 
   return (
     <div>
@@ -25,14 +27,14 @@ export const Layout = (props) => {
         onClose={() => setSignInOpen(false)}
       />
       <CreateTicketModal
-        open={isSignedIn && createEventOpen}
+        open={isSignedIn && createTicketOpen}
+        onClose={() => setCreateTicketOpen(false)}
+        onSubmit={createTicket}
+      />
+
+      <CreateEventModal open={isSignedIn && createEventOpen}
         onClose={() => setCreateEventOpen(false)}
-        onSubmit={createEvent}
-      />
-      <SavedTicketsModal
-        open={SavedTicketsOpen}
-        onClose={() => setSavedTicketsOpen(false)}
-      />
+        onSubmit={createEvent}/>
       <div style={{ maxWidth: "100vw", zIndex: 100 }}>
         <header
           className="p-3 text-white"
@@ -60,21 +62,21 @@ export const Layout = (props) => {
               </ul>
 
               <div className="text-end">
-                {/* <button
-                  type="button"
-                  className="btn btn-light me-4"
-                  onClick={() => {
-                    setSavedTicketsOpen(true);
-                  }}
-                  disabled={!isSignedIn}
-                >
-                  Upcoming Events
-                </button> */}
-                <button
+              <button
                   type="button"
                   className="btn btn-light me-4"
                   onClick={() => {
                     setCreateEventOpen(true);
+                  }}
+                  disabled={!isSignedIn}
+                >
+                  Add Meeting
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-light me-4"
+                  onClick={() => {
+                    setCreateTicketOpen(true);
                   }}
                   disabled={!isSignedIn}
                 >

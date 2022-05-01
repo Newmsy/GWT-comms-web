@@ -6,14 +6,14 @@ export const initialState = {
   tickets: [],
 };
 
-const getEventsSlice = createSlice({
-  name: "GetEvents",
+const getTicketsSlice = createSlice({
+  name: "GetTickets",
   initialState,
   reducers: {
-    fetchEvents(state) {
+    fetchTickets(state) {
       state.loading = true;
     },
-    fetchEventsSuccess(state, action) {
+    fetchTicketsSuccess(state, action) {
       console.log("success");
       state.loading = false;
       state.fetched = true;
@@ -22,8 +22,8 @@ const getEventsSlice = createSlice({
   },
 });
 
-export const getEventsStateSelector = (state) => state.events;
+export const getTicketsStateSelector = (state) => state.tickets;
 
-const getEventsActions = getEventsSlice.actions;
+const getTicketsActions = getTicketsSlice.actions;
 
-export { getEventsActions, getEventsSlice };
+export { getTicketsActions, getTicketsSlice };
