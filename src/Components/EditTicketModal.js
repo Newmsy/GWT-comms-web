@@ -11,7 +11,7 @@ import {
 import React from "react";
 import { useToastDispatcher } from "../Store/Areas/Toast/hooks";
 import { useTickets } from "../Store/Areas/Ticket/FetchTickets/hooks";
-import { useEditEvent } from "../Store/Areas/Ticket/EditTicket/hooks";
+import { useEditTicket } from "../Store/Areas/Ticket/EditTicket/hooks";
 
 const style = {
   position: "absolute",
@@ -39,7 +39,7 @@ export const EditTicketModal = ({ open, onClose, ticket }) => {
   console.log(ticket);
   console.log(title);
 
-  const { onSubmitEdit, onSubmitDelete } = useEditEvent();
+  const { onSubmitEdit, onSubmitDelete } = useEditTicket();
 
   const { addToast } = useToastDispatcher();
 

@@ -10,11 +10,16 @@ import {
 import { makeStyles } from "@mui/styles";
 import { FormatDateString } from "../../Utils/DateUtils";
 import { EditTicketModal } from "../../Components/EditTicketModal";
+import { useEvents } from "../../Store/Areas/Event/FetchEvents/hooks";
+import { EditEventModal } from "../../Components/EditEventModal";
 
 export const Calendar = () => {
   const { tickets } = useTickets();
+  const { events } = useEvents();
+  console.log(events)
   const styles = useStyles();
   const [editingItem, setEditingItem] = React.useState(null);
+  const [editingEvent, setEditingEvent] = React.useState(null);
   const [filterStatus, setFilterStatus] = React.useState("All")
 
   const filteredTickets = React.useMemo(()=>{
@@ -32,7 +37,7 @@ export const Calendar = () => {
   },[filteredTickets])
 
   const sprintEta = React.useMemo(()=>{
-    return sprintTickets.reduce((prev,curr)=>{return prev+curr.etaDays},0)
+    return sprintTickets.reduce((prev,curr)=>{return prev+curr.status!=="Complete"? curr.etaDays:0},0)
   },[sprintTickets])
   
 
@@ -54,6 +59,13 @@ export const Calendar = () => {
           ticket={{ ...editingItem?.ticket }}
         />
       )}
+      {editingEvent != null && (
+        <EditEventModal
+          open={editingEvent != null}
+          onClose={() => setEditingEvent(null)}
+          event={{ ...editingEvent?.event }}
+        />
+      )}
       <Paper
         style={{
           width: "80%",
@@ -71,7 +83,7 @@ export const Calendar = () => {
           alignItems="flex-end"
         >
           <p className={styles.titleB}>Current Sprint</p>
-          <p>Total ETA: <b>{sprintEta} day(s)</b></p>
+          <p>Total ETA remaining: <b>{sprintEta} day(s)</b></p>
         </Box>
         <Box marginLeft={4}>
               <p style={{ fontSize: 20, marginBottom: 0 }}>Filter</p>
@@ -151,32 +163,11 @@ export const Calendar = () => {
           flexDirection="column"
           justifyContent="space-between"
         >
-          {sprintTickets?.map((ticket) => (
-            <TicketItem data={{ ...ticket }} setEditingItem={setEditingItem} />
+          {events?.map((event) => (
+            <CalendarItem data={{ ...event }} setEditingItem={setEditingEvent} />
           ))}
         </Box>
-        <Box
-          marginLeft={4}
-          marginTop={8}
-          paddingRight={10}
-          display="flex"
-          justifyContent="space-between"
-        >
-          <p className={styles.titleB}>Backlog</p>
-        </Box>
-
-        <Box
-          marginLeft={4}
-          marginTop={4}
-          paddingRight={10}
-          display="flex"
-          flexDirection="column"
-          justifyContent="space-between"
-        >
-          {nonSprintTickets?.map((ticket) => (
-            <TicketItem data={{ ...ticket }} setEditingItem={setEditingItem} />
-          ))}
-        </Box>
+        
       </Paper>
     </div>
   );
@@ -207,7 +198,7 @@ const TicketItem = ({
       >
         <Box>
           <h2>{title}</h2>
-          <p>{description}</p>
+          <p>{description.split("\n").map(item => <p>{item}</p>)}</p>
         </Box>
         <Button
           onClick={() =>
@@ -268,12 +259,12 @@ export const CalendarItem = ({
       >
         <Box>
           <h2>{title} - {FormatDateString(date)}</h2>
-          <p>{description}</p>
+          <p>{description.split("\n").map(item => <p>{item}</p>)}</p>
         </Box>
         <Button
           onClick={() =>
             setEditingItem({
-              ticket: {
+              event: {
                 title,
                 description,
                 date,

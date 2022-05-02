@@ -8,7 +8,7 @@ export const StatusCodes = {
   NOT_FOUND: 404,
 };
 
-const baseUrl = "https://gwt-comms-api.azurewebsites.net/";
+const baseUrl = "http://localhost:7065";
 
 class ApiClient {
   *get(url, shouldHandleErrors = true) {

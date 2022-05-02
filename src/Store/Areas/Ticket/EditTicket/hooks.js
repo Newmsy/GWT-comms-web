@@ -1,7 +1,7 @@
 import React from "react";
 import { HookApiClient } from "../../../apiClient";
 
-export const useEditEvent = () => {
+export const useEditTicket = () => {
     const onSubmitEdit = React.useCallback(async ({...ticket})=>{
         const apiClient = new HookApiClient()
         console.log(ticket)
