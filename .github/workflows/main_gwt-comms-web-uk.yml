@@ -55,4 +55,4 @@ jobs:
           app-name: 'gwt-comms-web-uk'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6EBABFAED9CA4D29AB9DAB98C092C85D }}
-          package: .
+          package: release.zip
