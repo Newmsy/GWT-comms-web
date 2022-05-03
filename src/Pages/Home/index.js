@@ -37,7 +37,7 @@ export const Calendar = () => {
   },[filteredTickets])
 
   const sprintEta = React.useMemo(()=>{
-    return sprintTickets.reduce((prev,curr)=>{return prev+curr.status!=="Complete"? curr.etaDays:0},0)
+    return sprintTickets.reduce((prev,curr)=>{return prev+(curr.status!=="Completed"? curr.etaDays:0)},0)
   },[sprintTickets])
   
 
@@ -82,7 +82,7 @@ export const Calendar = () => {
           justifyContent="space-between"
           alignItems="flex-end"
         >
-          <p className={styles.titleB}>Current Sprint</p>
+          <p className={styles.titleB} style={{fontSize: 30}}>Current Sprint</p>
           <p>Total ETA remaining: <b>{sprintEta} day(s)</b></p>
         </Box>
         <Box marginLeft={4}>
@@ -119,7 +119,7 @@ export const Calendar = () => {
           display="flex"
           justifyContent="space-between"
         >
-          <p className={styles.titleB}>Backlog</p>
+          <p className={styles.titleB} style={{fontSize: 30}}>Backlog</p>
         </Box>
 
         <Box
