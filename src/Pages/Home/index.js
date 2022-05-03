@@ -22,6 +22,11 @@ export const Calendar = () => {
   const [editingEvent, setEditingEvent] = React.useState(null);
   const [filterStatus, setFilterStatus] = React.useState("All")
 
+  const sprintRef = React.useRef(null)
+  const backlogRef = React.useRef(null)
+  const meetingRef = React.useRef(null)
+
+
   const filteredTickets = React.useMemo(()=>{
     return tickets.filter(ticket => filterStatus === "All" || ticket.status === filterStatus)
   },[filterStatus, tickets])
@@ -39,6 +44,10 @@ export const Calendar = () => {
   const sprintEta = React.useMemo(()=>{
     return sprintTickets.reduce((prev,curr)=>{return prev+(curr.status!=="Completed"? curr.etaDays:0)},0)
   },[sprintTickets])
+
+  const scrollToElement = (ref) => {
+    ref.current.scrollIntoView()
+  }
   
 
   return (
@@ -79,10 +88,32 @@ export const Calendar = () => {
           marginTop={4}
           paddingRight={10}
           display="flex"
+          justifyContent="flex-start"
+          alignItems="flex-end"
+        >
+          <p className={styles.titleB} style={{fontSize: 30, marginRight: 50}} onClick={()=>{scrollToElement(sprintRef)}}><a href="#CurrentSprint" style={{color: '#2976D2'}}>Current Sprint</a></p>
+          <p className={styles.titleB} style={{fontSize: 30, marginRight: 50}} onClick={()=>{scrollToElement(backlogRef)}}><a href="#Backlog" style={{color: '#2976D2'}}>Backlog</a></p>
+          <p className={styles.titleB} style={{fontSize: 30, marginRight: 50}} onClick={()=>{scrollToElement(meetingRef)}}><a href="#Meeting" style={{color: '#2976D2'}}>Meetings</a></p>
+        </Box>
+        
+      </Paper>
+      <Paper
+        style={{
+          width: "80%",
+          marginTop: 50,
+          paddingTop: 20,
+          paddingBottom: 50,
+        }}
+      >
+        <Box
+          marginLeft={4}
+          marginTop={4}
+          paddingRight={10}
+          display="flex"
           justifyContent="space-between"
           alignItems="flex-end"
         >
-          <p className={styles.titleB} style={{fontSize: 30}}>Current Sprint</p>
+          <p className={styles.titleB} style={{fontSize: 30,color: '#2976D2', fontWeight: 600}} ref={sprintRef}>Current Sprint</p>
           <p>Total ETA remaining: <b>{sprintEta} day(s)</b></p>
         </Box>
         <Box marginLeft={4}>
@@ -119,7 +150,7 @@ export const Calendar = () => {
           display="flex"
           justifyContent="space-between"
         >
-          <p className={styles.titleB} style={{fontSize: 30}}>Backlog</p>
+          <p className={styles.titleB} style={{fontSize: 30,color: '#2976D2', fontWeight: 600}} ref={backlogRef}>Backlog</p>
         </Box>
 
         <Box
@@ -151,7 +182,7 @@ export const Calendar = () => {
           justifyContent="space-between"
           alignItems="flex-end"
         >
-          <p className={styles.titleB}>Meetings</p>
+          <p className={styles.titleB} ref={meetingRef} style={{color: '#2976D2', fontWeight: 600, fontSize: 30}}>Meetings</p>
           
         </Box>
 
