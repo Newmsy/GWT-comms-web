@@ -89,11 +89,13 @@ export const Calendar = () => {
           paddingRight={10}
           display="flex"
           justifyContent="flex-start"
-          alignItems="flex-end"
+          alignItems="center"
         >
-          <p className={styles.titleB} style={{fontSize: 30, marginRight: 50}} onClick={()=>{scrollToElement(sprintRef)}}><a href="#CurrentSprint" style={{color: '#2976D2'}}>Current Sprint</a></p>
-          <p className={styles.titleB} style={{fontSize: 30, marginRight: 50}} onClick={()=>{scrollToElement(backlogRef)}}><a href="#Backlog" style={{color: '#2976D2'}}>Backlog</a></p>
-          <p className={styles.titleB} style={{fontSize: 30, marginRight: 50}} onClick={()=>{scrollToElement(meetingRef)}}><a href="#Meeting" style={{color: '#2976D2'}}>Meetings</a></p>
+          <p className={styles.titleB} style={{fontSize: 30, marginRight: 25}} onClick={()=>{scrollToElement(sprintRef)}}><a href="#CurrentSprint" style={{color: '#2976D2'}}>Current Sprint</a></p>
+          <p className={styles.titleB} style={{fontSize: 30, marginRight: 25}} onClick={()=>{scrollToElement(sprintRef)}}>•</p>
+          <p className={styles.titleB} style={{fontSize: 30, marginRight: 25}} onClick={()=>{scrollToElement(backlogRef)}}><a href="#Backlog" style={{color: '#2976D2'}}>Backlog</a></p>
+          <p className={styles.titleB} style={{fontSize: 30, marginRight: 25}} onClick={()=>{scrollToElement(sprintRef)}}>•</p>
+          <p className={styles.titleB} style={{fontSize: 30, marginRight: 25}} onClick={()=>{scrollToElement(meetingRef)}}><a href="#Meeting" style={{color: '#2976D2'}}>Meetings</a></p>
         </Box>
         
       </Paper>
